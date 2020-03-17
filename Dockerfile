@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM hbagdi/deck
 
 COPY entrypoint.sh /entrypoint.sh
 
