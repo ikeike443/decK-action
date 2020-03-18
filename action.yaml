@@ -8,7 +8,7 @@ inputs:
   kong_workspaces:
     description: 'Kong workspaces where yaml should be located'
     required: false
-    default: "kong" 
+    default: './'
   options:
     description: 'option arguments'
     required: false
