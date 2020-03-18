@@ -6,7 +6,7 @@ services:
   name: httpbin_anything
   path: /anything
   port: 443
-  protoscol: https
+  protocol: https
   read_timeout: 60000
   retries: 10
   write_timeout: 60000

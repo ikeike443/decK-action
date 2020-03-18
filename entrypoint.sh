@@ -1,11 +1,15 @@
 #!/bin/sh -l
+set -e -o pipefail
 
 # deck validate command
 deck_execute (){
     dir=$1
     ops=$2
-    echo $dir
-    echo $ops
+    if [ ! -e ${dir} ]; then
+        echo "${dir}: No such file or directoy exists";
+        exit 1;
+    fi
+
     for file in $(ls $dir); do
         echo $dir/$file
         deck validate ${ops} -s $dir/$file
@@ -18,6 +22,7 @@ case $1 in
     "sync") deck_execute $2 "$3" ;;
     * ) deck $1 $3 ;;
 esac
+
 
 
 # TODO: 引数がなくても動くように
