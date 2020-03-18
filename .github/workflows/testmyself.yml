@@ -21,9 +21,23 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       name: "checkout"
-    - name: decK ping!?
-      id: decK
+    - name: decK ping
+      id: decK_ping
       uses: ./
       with:
-        kong-addr: ${{ secrets.KONG_ADDR }}
-        headers: ${{ secrets.KONG_HEADERS }}
+        command: "ping"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"
+    - name: decK validate
+      id: decK_validate
+      uses: ./
+      with:
+        command: "validate"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
+        kong_workspaces: "test/kong"
+    - name: decK diff
+      id: decK_diff
+      uses: ./
+      with:
+        command: "diff"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
+        kong_workspaces: "test/kong"
