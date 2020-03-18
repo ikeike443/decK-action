@@ -24,6 +24,7 @@ jobs:
       uses: ./
       with:
         command: "validate"
+        github_sha: $GITHUB_SHA
         options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
         # kong_workspaces: "test/kong"
     # - name: decK sync
