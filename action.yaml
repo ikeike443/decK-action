@@ -9,6 +9,10 @@ inputs:
     description: 'Kong workspaces where yaml should be located'
     required: false
     default: '.'
+  github_sha:
+    description: 'GitHub SHA'
+    required: true
+    default: $GITHUB_SHA 
   options:
     description: 'option arguments'
     required: false
@@ -18,5 +22,5 @@ runs:
   args:
     - ${{ inputs.command }}
     - ${{ inputs.kong_workspaces }}
-    - $GITHUB_SHA
+    - ${{ inputs.github_sha }}
     - ${{ inputs.options }}
