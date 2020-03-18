@@ -18,5 +18,5 @@ runs:
   args:
     - ${{ inputs.command }}
     - ${{ inputs.kong_workspaces }}
-    - ${{ github.sha }}
+    - $GITHUB_SHA
     - ${{ inputs.options }}
