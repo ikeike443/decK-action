@@ -12,6 +12,7 @@ deck_execute (){
 
     for file in $(ls $dir); do
         echo $dir/$file
+
         deck validate ${ops} -s $dir/$file
     done
 }
