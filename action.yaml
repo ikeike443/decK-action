@@ -8,7 +8,7 @@ inputs:
   kong_workspaces:
     description: 'Kong workspaces where yaml should be located'
     required: false
-    default: 'kong' 
+    default: "kong" 
   options:
     description: 'option arguments'
     required: false
@@ -17,5 +17,5 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.command }}
-    - ${{ inputs.options }}
     - ${{ inputs.kong_workspaces }}
+    - ${{ inputs.options }}
