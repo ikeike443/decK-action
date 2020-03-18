@@ -25,11 +25,11 @@ jobs:
       with:
         command: "validate"
         options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
-       # kong_workspaces: "test/kong"
+        kong_workspaces: "test/kong"
     - name: decK sync
       id: decK_sync
       uses: ./
       with:
         command: "sync"
         options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
-      #  kong_workspaces: "test/kong"
+        kong_workspaces: "test/kong"
