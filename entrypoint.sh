@@ -1,7 +1,6 @@
 #!/bin/sh -l
 set -e -o pipefail
 
-# deck validate command
 deck_multi_execute (){
     cmd=$1
     dir=$2
@@ -14,7 +13,7 @@ deck_multi_execute (){
     for file in $(ls $dir); do
         echo $dir/$file
 
-        deck $cmd $ops -s $dir/$file
+        deck $cmd $ops -s $dir/$file 2>&1
     done
 }
 
