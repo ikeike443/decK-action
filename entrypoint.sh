@@ -30,3 +30,4 @@ esac
 # TODO: 引数がなくても動くように
 # TODO: Sync時にDeploy API叩く
 # TODO: diffでComment入れる
+# TODO: ghをいれる（GitHub CLI）
