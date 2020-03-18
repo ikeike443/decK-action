@@ -1,16 +1,21 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'decK action'
+description: 'Declarative Configuration management for Kong'
 inputs:
-  kong-addr:  # id of input
-    description: 'Kong Address'
+  command:
+    description: 'decK command you want to execute'
     required: true
-    default: 'http://localhost:8001'
-  headers:  # id of input
-    description: 'Kong Headers'
+    default: 'ping'
+  kong_workspaces:
+    description: 'Kong workspaces where yaml should be located'
+    required: false
+    default: 'kong' 
+  options:
+    description: 'option arguments'
     required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs['kong-addr'] }}
-    - ${{ inputs.headers }}
+    - ${{ inputs.command }}
+    - ${{ inputs.options }}
+    - ${{ inputs.kong_workspaces }}
