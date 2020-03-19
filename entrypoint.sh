@@ -10,7 +10,7 @@ deck_multi_execute (){
         echo "${dir}: No such file or directoy exists";
         exit 1;
     fi
-
+    echo $GITHUB_SHA
     # for file in $(ls $dir); do
     for file in $(git diff --name-only $GITHUB_SHA master); do
         echo $dir/$file
