@@ -12,7 +12,7 @@ deck_multi_execute (){
     fi
     echo $GITHUB_SHA
     # for file in $(ls $dir); do
-    for file in $(git diff --name-only $GITHUB_SHA master); do
+    for file in $(git diff --name-only $GITHUB_SHA origin/master); do # TODO: it's not ideal
         echo $dir/$file
 
         deck $cmd $ops -s $dir/$file 2>&1
