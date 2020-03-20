@@ -22,7 +22,8 @@ main (){
         if [[ $file =~ ${dir}/.+\.(yml|yaml) ]]; then
             echo $file
             case $cmd in
-                "validate"|"diff") deck $cmd $ops $file ;;
+                "validate") deck $cmd $ops -s $file ;; 
+                "diff") deck $cmd $ops -s $file ;; # TODO: add a code review comment if a diff exists
                 "sync") deploy $cmd $ops $file ;;
                 * ) echo "deck $cmd is not supported." && exit 1 ;;
             esac
@@ -53,25 +54,6 @@ deploy () {
 
   
 }
-
-
-# TODO: コメント直す。とりあえず当初はいらないかも。
-# comment () {
-#     deck $cmd $ops -s $file
-#     # out=$(deck $cmd $ops -s $file | sed -e "s/\"//g")
-#     out=$(deck $cmd $ops -s $file)
-#     echo $out
-#     if [ -n "$out" ]; then
-#         # body_txt="{ \"body\": \"${out}\" }"
-#         # echo $body_txt
-#         s_code=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$pull_number/comments -H "Authorization: token $token" -d '{ "body": "'${out}'" }' -o /dev/null -w '%{http_code}\n' -s)
-
-#         if [[ ! $s_code =~ ^2.. ]]; then
-#             echo "GitHub API Error, status code:$s_code"
-#             exit 1
-#         fi
-#     fi
-# }
 
 case $1 in
     "ping") deck $1 $3;;
