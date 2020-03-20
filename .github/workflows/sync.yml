@@ -24,13 +24,16 @@ jobs:
       uses: ./
       with:
         command: "validate"
-        # github_sha: $GITHUB_SHA # TODO: 動いてない
         options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
-        # kong_workspaces: "test/kong"
-    # - name: decK sync
-    #   id: decK_sync
-    #   uses: ./
-    #   with:
-    #     command: "sync"
-    #     options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
-        # kong_workspaces: "test/kong"
+        kong_workspaces: "test/kong"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: decK sync
+      id: decK_sync
+      uses: ./
+      env:
+        ENV_URL: "http://ikeike443-demo.net:8002"
+      with:
+        command: "sync"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
+        kong_workspaces: "test/kong"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
