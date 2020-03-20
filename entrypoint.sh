@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash -l
 set -e -o pipefail
 
 deck_multi_execute (){
@@ -10,11 +10,24 @@ deck_multi_execute (){
         echo "${dir}: No such file or directoy exists";
         exit 1;
     fi
-    echo $GITHUB_SHA
-    files=$(git diff --name-only $GITHUB_SHA master);
+    # echo $GITHUB_SHA
+    # echo $GITHUB_REF
+
+    # get pull number
+    echo $GITHUB_EVENT_PATH
+    cat $GITHUB_EVENT_PATH
+    pull_number=$(cat $GITHUB_EVENT_PATH | jq .number)
+    echo $pull_number
+
+    files=$(curl https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files | jq -r ".[] | .filename");
+    # echo $files
     for file in $files; do
-        echo $dir/$file
-        deck $cmd $ops -s $dir/$file 2>&1
+        # echo $file
+        # echo "${dir}/.+\.(yml|yaml)"
+        if [[ $file =~ ${dir}/.+\.(yml|yaml) ]]; then
+            echo $file
+            deck $cmd $ops -s $file 2>&1
+        fi
     done
 }
 
