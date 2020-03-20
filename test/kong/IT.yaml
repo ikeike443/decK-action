@@ -55,7 +55,7 @@ services:
         vary_query_params: null
       enabled: true
       run_on: first
-      protocoals:
+      protocols:
       - grpc
       - grpcs
       - http
