@@ -32,6 +32,7 @@ jobs:
         command: "validate"
         options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
         kong_workspaces: "test/kong"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
     - name: decK diff
       id: decK_diff
       uses: ./
@@ -39,3 +40,4 @@ jobs:
         command: "diff"
         options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
         kong_workspaces: "test/kong"
+        github_token: ${{ secrets.GITHUB_TOKEN }}

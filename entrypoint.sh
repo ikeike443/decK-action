@@ -1,34 +1,62 @@
-#!/bin/sh -l
+#!/bin/bash -l
 set -e -o pipefail
 
-deck_multi_execute (){
+main (){
     cmd=$1
     dir=$2
-    sha=$3
-    ops=$4
+    ops=$3
+    token=$4
     if [ ! -e ${dir} ]; then
         echo "${dir}: No such file or directoy exists";
         exit 1;
     fi
 
-    # for file in $(ls $dir); do
-    for file in $(git diff --name-only ${sha} master); do
-        echo $dir/$file
+    # get the pull request number
+    pull_number=$(cat $GITHUB_EVENT_PATH | jq .number)
 
-        deck $cmd $ops -s $dir/$file 2>&1
+    # get file lists on the pull request we're on
+    files=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files | jq -r ".[] | .filename");
+    
+    # execute deck command only for the files in the configured directry
+    for file in $files; do
+        if [[ $file =~ ${dir}/.+\.(yml|yaml) ]]; then
+            echo $file
+            case $cmd in
+                "validate") deck $cmd $ops -s $file ;; 
+                "diff") deck $cmd $ops -s $file ;; # TODO: add a code review comment if a diff exists
+                "sync") deploy $cmd $ops $file ;;
+                * ) echo "deck $cmd is not supported." && exit 1 ;;
+            esac
+        fi
     done
 }
 
+# decK sync after dry-run and use GitHub Deployment API for visibility
+deploy () {
+    # dry-run
+    deck diff $ops -s $file --non-zero-exit-code
+
+    # only if there is a diff present, then start the process
+    if [[ $? = 2 ]]; then
+        # create deployment on github
+        dep_id=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/deployments -H "Authorization: token  $token" -d '{ "ref": "'$GITHUB_REF'", "payload": { "deploy": "migrate" }, "description": "Executing decK sync..." }' | jq -r ".id")
+
+        echo $dep_id
+
+        # deck sync
+        deck $cmd $ops -s $file
+
+        # update deployment on github
+        curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/deployments/$dep_id/statuses -H "Authorization: token  $token" -d '{ "state": "success", "environment_url": "'$ENV_URL'" }'
+    else
+        echo "There is no diff to sync"
+    fi
+
+  
+}
+
 case $1 in
-    "validate") deck_multi_execute $1 $2 $3 "$4" ;;
-    "diff") deck_multi_execute $1 $2 $3 "$4" ;;
-    "sync") deck_multi_execute $1 $2 $3 "$4" ;;
-    * ) deck $1 $4 ;;
+    "ping") deck $1 $3;;
+    "validate"|"diff"|"sync") main $1 $2 "$3" $4;;
+    * ) echo "deck $1 is not supported." && exit 1 ;;
 esac
-
-
-
-# TODO: 引数がなくても動くように
-# TODO: Sync時にDeploy API叩く
-# TODO: diffでComment入れる
-# TODO: ghをいれる（GitHub CLI）
