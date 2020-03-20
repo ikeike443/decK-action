@@ -11,8 +11,9 @@ deck_multi_execute (){
         exit 1;
     fi
 
-    # for file in $(ls $dir); do
-    for file in $(git diff --name-only $GITHUB_SHA master); do
+    files=$(git diff --name-only $GITHUB_SHA master);
+
+    for file in $files; do
         echo $dir/$file
 
         deck $cmd $ops -s $dir/$file 2>&1
