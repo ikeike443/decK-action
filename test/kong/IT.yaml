@@ -8,7 +8,7 @@ services:
   port: 443
   protocol: https
   read_timeout: 60000
-  retries: 200
+  retries: 5
   write_timeout: 60000
   routes:
   - name: httpbin_anything
@@ -55,7 +55,7 @@ services:
         vary_query_params: null
       enabled: true
       run_on: first
-      protocols:
+      protocoals:
       - grpc
       - grpcs
       - http
