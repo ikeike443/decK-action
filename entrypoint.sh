@@ -10,8 +10,9 @@ main (){
         echo "${dir}: No such file or directoy exists";
         exit 1;
     fi
-    if [ ! -e ${token} ]; then
+    if [ -z "$token" ]; then
         echo "GitHub_TOKEN is required, please set 'github_token' under 'with' section in your workflow file."
+        exit 1;
     fi
     if [ $GITHUB_EVENT_NAME != "pull_request" ] && 
        [ $GITHUB_EVENT_NAME != "push" ]; then
