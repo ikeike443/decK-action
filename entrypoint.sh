@@ -11,7 +11,7 @@ main (){
         exit 1;
     fi
     if [ -z "$token" ]; then
-        echo "GitHub_TOKEN is required, please set 'github_token' under 'with' section in your workflow file."
+        echo "GitHub_TOKEN is required, please set 'github_token' under 'with' section in your workflow file.";
         exit 1;
     fi
     if [ $GITHUB_EVENT_NAME != "pull_request" ] && 
@@ -73,17 +73,20 @@ deploy () {
     # only if there is a diff present, then start the process
     if [[ $? = 2 ]]; then
         # create deployment on github
-        echo "Calling GitHub Deployment API..."
+        echo "Calling GitHub Deployment API...";
+        
         dep_id=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/deployments -H "Authorization: token  $token" -d '{ "ref": "'$GITHUB_REF'", "payload": { "deploy": "migrate" }, "description": "Executing decK sync..." }' | jq -r ".id")
 
-        echo $dep_id
+        echo $dep_id;
 
         # deck sync
-        echo "Executing: deck $cmd $ops -s $file" 
+        echo "Executing: deck $cmd $ops -s $file";
+        
         deck $cmd $ops -s $file
 
         # update deployment on github
-        echo "Updating GitHub Deployment API..."
+        echo "Updating GitHub Deployment API...";
+        
         curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/deployments/$dep_id/statuses -H "Authorization: token  $token" -d '{ "state": "success", "environment_url": "'$ENV_URL'" }'
     else
         echo "There is no diff to sync"
