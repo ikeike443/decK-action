@@ -10,6 +10,9 @@ main (){
         echo "${dir}: No such file or directoy exists";
         exit 1;
     fi
+    if [ ! -e ${token} ]; then
+        echo "GitHub_TOKEN is required, please set 'github_token' under 'with' section in your workflow file."
+    fi
     if [ $GITHUB_EVENT_NAME != "pull_request" ] && 
        [ $GITHUB_EVENT_NAME != "push" ]; then
         echo "Event ${GITHUB_EVENT_NAME} with deck ${cmd} is not supported";
