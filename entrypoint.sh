@@ -16,16 +16,12 @@ main (){
         exit 1;        
     fi
 
-
+    # TODO: if files to sync don't exists on commits, tell so to stdo
     if [[ $GITHUB_EVENT_NAME = "pull_request" ]]; then
         # get the pull request number 
-        # TODO: bug in merging into master
         pull_number=$(cat $GITHUB_EVENT_PATH | jq .number)
 
-
-
         # get file lists on the pull request we're on 
-        # TODO: bug in merging into master
         files=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files | jq -r ".[] | .filename");
     elif [[ $GITHUB_EVENT_NAME = "push" ]]; then
         files=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA |  jq ".files[].filename")
