@@ -49,10 +49,9 @@ main (){
     # execute deck command only for the files in the configured directry
     for file in $files; do
         if [[ $file =~ ${dir}/.+\.(yml|yaml) ]]; then
-            echo $file
             case $cmd in
-                "validate") deck $cmd $ops -s $file ;; 
-                "diff") deck $cmd $ops -s $file ;; # TODO: add a code review comment if a diff exists
+                "validate") echo "Executing: deck $cmd $ops -s $file"; deck $cmd $ops -s $file ;; 
+                "diff") echo "Executing: deck $cmd $ops -s $file"; deck $cmd $ops -s $file ;; # TODO: add a code review comment if a diff exists
                 "sync") deploy $cmd $ops $file ;;
                 * ) echo "deck $cmd is not supported." && exit 1 ;;
             esac
@@ -68,14 +67,17 @@ deploy () {
     # only if there is a diff present, then start the process
     if [[ $? = 2 ]]; then
         # create deployment on github
+        echo "Calling GitHub Deployment API..."
         dep_id=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/deployments -H "Authorization: token  $token" -d '{ "ref": "'$GITHUB_REF'", "payload": { "deploy": "migrate" }, "description": "Executing decK sync..." }' | jq -r ".id")
 
         echo $dep_id
 
         # deck sync
+        echo "Executing: deck $cmd $ops -s $file" 
         deck $cmd $ops -s $file
 
         # update deployment on github
+        echo "Updating GitHub Deployment API..."
         curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/deployments/$dep_id/statuses -H "Authorization: token  $token" -d '{ "state": "success", "environment_url": "'$ENV_URL'" }'
     else
         echo "There is no diff to sync"
