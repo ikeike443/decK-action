@@ -21,7 +21,7 @@ main (){
         pull_number=$(cat $GITHUB_EVENT_PATH | jq .number)
 
         # get file lists on the pull request we're on 
-        res=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files -w "\n%{http_code}")
+        res=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files -w "\n%{http_code}" -s)
         
         result_json=$(echo "$res" | sed -e '$d')
         status_code=$(echo "$res" | tail -n 1)
@@ -33,7 +33,7 @@ main (){
         fi 
     elif [[ $GITHUB_EVENT_NAME = "push" ]]; then
 
-        res=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA -w "\n%{http_code}")
+        res=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA -w "\n%{http_code}" -s)
 
         result_json=$(echo "$res" | sed -e '$d')
         status_code=$(echo "$res" | tail -n 1)
