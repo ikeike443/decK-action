@@ -8,7 +8,7 @@ services:
   port: 443
   protocol: https
   read_timeout: 60000
-  retries: 20
+  retries: 100
   write_timeout: 60000
   routes:
   - name: httpbin_anything
