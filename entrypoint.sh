@@ -10,12 +10,27 @@ main (){
         echo "${dir}: No such file or directoy exists";
         exit 1;
     fi
+    if [ $GITHUB_EVENT_NAME != "pull_request" ] && 
+       [ $GITHUB_EVENT_NAME != "push" ]; then
+        echo "Event ${GITHUB_EVENT_NAME} with deck ${cmd} is not supported";
+        exit 1;        
+    fi
 
-    # get the pull request number
-    pull_number=$(cat $GITHUB_EVENT_PATH | jq .number)
 
-    # get file lists on the pull request we're on
-    files=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files | jq -r ".[] | .filename");
+    if [[ $GITHUB_EVENT_NAME = "pull_request" ]]; then
+        # get the pull request number 
+        # TODO: bug in merging into master
+        pull_number=$(cat $GITHUB_EVENT_PATH | jq .number)
+
+
+
+        # get file lists on the pull request we're on 
+        # TODO: bug in merging into master
+        files=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files | jq -r ".[] | .filename");
+    elif [[ $GITHUB_EVENT_NAME = "push" ]]; then
+        files=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA |  jq ".files[].filename")
+    fi
+
     
     # execute deck command only for the files in the configured directry
     for file in $files; do
