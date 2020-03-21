@@ -16,15 +16,33 @@ main (){
         exit 1;        
     fi
 
-    # TODO: if files to sync don't exists on commits, tell so to stdo
     if [[ $GITHUB_EVENT_NAME = "pull_request" ]]; then
         # get the pull request number 
         pull_number=$(cat $GITHUB_EVENT_PATH | jq .number)
 
         # get file lists on the pull request we're on 
-        files=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files | jq -r ".[] | .filename");
+        res=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$pull_number/files -w "\n%{http_code}")
+        
+        result_json=$(echo "$res" | sed -e '$d')
+        status_code=$(echo "$res" | tail -n 1)
+        
+        if [ $status_code = 200 ]; then
+            files=$(echo $result_json | jq -r ".[] | .filename")
+        else
+            echo "No file exists on the commit: $result_json"
+        fi 
     elif [[ $GITHUB_EVENT_NAME = "push" ]]; then
-        files=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA |  jq ".files[].filename")
+
+        res=$(curl -H "Authorization: token $token" https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA -w "\n%{http_code}")
+
+        result_json=$(echo "$res" | sed -e '$d')
+        status_code=$(echo "$res" | tail -n 1)
+
+        if [ $status_code = 200 ]; then
+            files=$(echo $result_json | jq ".files[].filename")
+        else
+            echo "No file exists on the commit: $result_json"
+        fi
     fi
 
     
