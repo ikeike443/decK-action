@@ -7,8 +7,8 @@ inputs:
     default: 'ping'
   kong_workspaces:
     description: 'Kong workspaces where yaml should be located'
-    required: false
-    default: '.'
+    required: true
+    default: 'kong'
   github_token:
     description: 'GitHub Token'
     required: true
