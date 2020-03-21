@@ -43,7 +43,7 @@ main (){
         status_code=$(echo "$res" | tail -n 1)
 
         if [ $status_code = 200 ]; then
-            files=$(echo $result_json | jq ".files[].filename")
+            files=$(echo $result_json | jq -r ".files[].filename")
         else
             echo "No file exists on the commit: $result_json"
         fi
