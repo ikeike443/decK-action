@@ -78,7 +78,7 @@ deploy () {
         # create deployment on github
         echo "Calling GitHub Deployment API...";
         
-        res=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/deployments -H "Authorization: token  $token" -d '{ "ref": "'$GITHUB_SHA'", "payload": { "deploy": "migrate" }, "description": "Executing decK sync..." "required_contexts": "" }'  -w "\n%{http_code}" -s)
+        res=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/deployments -H "Authorization: token  $token" -d '{ "ref": "'$GITHUB_SHA'", "payload": { "deploy": "migrate" }, "description": "Executing decK sync..." "required_contexts": [] }'  -w "\n%{http_code}" -s)
 
         result_json=$(echo "$res" | sed -e '$d')
         status_code=$(echo "$res" | tail -n 1)
