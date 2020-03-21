@@ -68,16 +68,28 @@ main (){
 # decK sync after dry-run and use GitHub Deployment API for visibility
 deploy () {
     # dry-run
+    echo "Executing dry-run: deck diff $ops -s $file --non-zero-exit-code";
+    set +e
     deck diff $ops -s $file --non-zero-exit-code
-
+    ret=$?
+    set -e
     # only if there is a diff present, then start the process
-    if [[ $? = 2 ]]; then
+    if [ $ret = 2 ]; then
         # create deployment on github
         echo "Calling GitHub Deployment API...";
         
-        dep_id=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/deployments -H "Authorization: token  $token" -d '{ "ref": "'$GITHUB_REF'", "payload": { "deploy": "migrate" }, "description": "Executing decK sync..." }' | jq -r ".id")
+        res=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/deployments -H "Authorization: token  $token" -d '{ "ref": "'$GITHUB_SHA'", "payload": { "deploy": "migrate" }, "description": "Executing decK sync..." }'  -w "\n%{http_code}" -s)
 
-        echo $dep_id;
+        result_json=$(echo "$res" | sed -e '$d')
+        status_code=$(echo "$res" | tail -n 1)
+
+        if [ $status_code = 201 ]; then
+            dep_id=$(echo $result_json | jq -r ".id")
+        else
+            echo "Faild at creating GitHub Deployment: $result_json"
+        fi
+
+        echo "Deployment ID: $dep_id";
 
         # deck sync
         echo "Executing: deck $cmd $ops -s $file";
@@ -85,9 +97,18 @@ deploy () {
         deck $cmd $ops -s $file
 
         # update deployment on github
-        echo "Updating GitHub Deployment API...";
+        echo "Updating Status for GitHub Deployment API...";
         
-        curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/deployments/$dep_id/statuses -H "Authorization: token  $token" -d '{ "state": "success", "environment_url": "'$ENV_URL'" }'
+        res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/deployments/$dep_id/statuses -H "Authorization: token  $token" -d '{ "state": "success", "environment_url": "'$ENV_URL'" }' -s  -w "\n%{http_code}")
+
+        result_json=$(echo "$res" | sed -e '$d')
+        status_code=$(echo "$res" | tail -n 1)
+
+        if [ $status_code = 201 ]; then
+            echo "GitHub Deplooyment Status updated"
+        else
+            echo "Faild at updating Status for GitHub Deployment: $result_json"
+        fi
     else
         echo "There is no diff to sync"
     fi
