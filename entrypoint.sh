@@ -55,6 +55,8 @@ main (){
                 "sync") deploy $cmd $ops $file ;;
                 * ) echo "deck $cmd is not supported." && exit 1 ;;
             esac
+        else
+            echo "$file is found but is not target file for decK"
         fi
     done
 }
