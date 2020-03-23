@@ -1,5 +1,8 @@
 name: 'decK action'
 description: 'Declarative Configuration management for Kong'
+branding:
+  icon: 'repeat'  
+  color: 'green'
 inputs:
   command:
     description: 'decK command you want to execute'
