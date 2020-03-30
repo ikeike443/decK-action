@@ -2,18 +2,18 @@ _format_version: "1.1"
 _workspace: IT
 services:
 - connect_timeout: 60000
-  host: httpbin.org
-  name: httpbin_anything
-  path: /anything
-  port: 443
-  protocol: https
+  host: mockbin.com
+  name: mockbin
+  path: /request
+  port: 80
+  protocol: http
   read_timeout: 60000
   retries: 5
   write_timeout: 60000
   routes:
-  - name: httpbin_anything
+  - name: another_mockbin
     paths:
-    - /anything
+    - /request2
     preserve_host: false
     protocols:
     - http
@@ -21,16 +21,15 @@ services:
     strip_path: true
     https_redirect_status_code: 426
     plugins:
-    - name: proxy-cache-advanced
+    - name: rate-limiting-advanced
       config:
-        bypass_on_err: false
-        cache_control: false
-        cache_ttl: 300
-        content_type:
-        - text/plain
-        - application/json
-        memory:
-          dictionary_name: kong_db_cache
+        dictionary_name: kong_rate_limiting_counters
+        header_name: null
+        hide_client_headers: false
+        identifier: consumer
+        limit:
+        - 5
+        namespace: UhJ6KCXOYkAOhsV0SsIFtwly2YlhsQJ0
         redis:
           cluster_addresses: null
           database: 0
@@ -42,17 +41,11 @@ services:
           sentinel_password: null
           sentinel_role: null
           timeout: 2000
-        request_method:
-        - GET
-        - HEAD
-        response_code:
-        - 200
-        - 301
-        - 404
-        storage_ttl: null
-        strategy: memory
-        vary_headers: null
-        vary_query_params: null
+        strategy: cluster
+        sync_rate: 1
+        window_size:
+        - 30
+        window_type: sliding
       enabled: true
       run_on: first
       protocols:
@@ -60,19 +53,45 @@ services:
       - grpcs
       - http
       - https
-  plugins:
-  - name: key-auth
-    config:
-      anonymous: null
-      hide_credentials: false
-      key_in_body: false
-      key_names:
-      - apikey
-      run_on_preflight: true
-    enabled: true
-    run_on: first
+  - name: mockbin_request
+    paths:
+    - /request
+    preserve_host: false
     protocols:
-    - grpc
-    - grpcs
     - http
-    - https
+    regex_priority: 0
+    strip_path: true
+    https_redirect_status_code: 426
+    plugins:
+    - name: rate-limiting-advanced
+      config:
+        dictionary_name: kong_rate_limiting_counters
+        header_name: null
+        hide_client_headers: false
+        identifier: consumer
+        limit:
+        - 5
+        namespace: G9aW7mjtnBoNxuIArXvEp661UzVo0l8J
+        redis:
+          cluster_addresses: null
+          database: 0
+          host: null
+          password: null
+          port: null
+          sentinel_addresses: null
+          sentinel_master: null
+          sentinel_password: null
+          sentinel_role: null
+          timeout: 2000
+        strategy: cluster
+        sync_rate: 1
+        window_size:
+        - 30
+        window_type: sliding
+      enabled: true
+      run_on: first
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
