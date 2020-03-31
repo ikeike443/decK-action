@@ -116,8 +116,69 @@ deploy () {
   
 }
 
+
+dump () {
+    cmd=$1
+    dir=$2
+    ops=$3
+    token=$4
+    if [ ! -e ${dir} ]; then
+        echo "${dir}: No such file or directoy exists";
+        exit 1;
+    fi
+    if [ -z "$token" ]; then
+        echo "GitHub_TOKEN is required, please set 'github_token' under 'with' section in your workflow file.";
+        exit 1;
+    fi
+
+    cd $dir
+    deck dump $ops
+
+    github_user=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
+    git config --local user.email "noreply@example.com"
+    git config --local user.name $GITHUB_ACTOR
+
+    git add $(ls)
+    git commit -m "Sync back from the Kong instance."
+    branch="Kong-ReverseSync-$RANDOM"
+
+    # TODO: check if there is already PR exists
+    res=$(curl -X GET  https://api.github.com/search/issues?q=Kong+type:pr+is:open+repo:$GITHUB_REPOSITORY+head:Kong-ReverseSync -H "Authorization: token  $token" -s  -w "\n%{http_code}") 
+            
+    result_json=$(echo "$res" | sed -e '$d')
+    status_code=$(echo "$res" | tail -n 1)
+    if [ $status_code = 200 ]; then
+        count=$(echo $result_json | jq -r ".total_count")
+        if [ $count = 0 ]; then
+            git checkout -b $branch
+            git remote add deckdump "https://$github_user:$token@github.com/$GITHUB_REPOSITORY.git"
+            git push deckdump $branch
+            
+            res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "'$github_user':'$branch'", "base": "master", "body": "This is a reverse-sync pull request from your Kong instance." }' -s  -w "\n%{http_code}") 
+                    
+            result_json=$(echo "$res" | sed -e '$d')
+            status_code=$(echo "$res" | tail -n 1)
+            if [ $status_code = 201 ]; then
+                echo "Pull Request is created: $status_code"
+                echo "$result_json"
+            else
+                echo "Faild at creating a Pull Request: $status_code"
+                echo "$result_json"
+            fi
+        else
+            echo "Pull Requests are already existed: $status_code"
+            echo "$result_json"
+        fi
+    else
+        echo "Error during GitHub search: $status_code"
+        echo "$result_json"
+    fi 
+
+}
+
 case $1 in
     "ping") deck $1 $3;;
     "validate"|"diff"|"sync") main $1 $2 "$3" $4;;
+    "dump") dump $1 $2 "$3" $4;; 
     * ) echo "deck $1 is not supported." && exit 1 ;;
 esac
