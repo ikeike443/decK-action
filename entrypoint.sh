@@ -116,8 +116,60 @@ deploy () {
   
 }
 
+
+dump () {
+    cmd=$1
+    dir=$2
+    ops=$3
+    token=$4
+    if [ ! -e ${dir} ]; then
+        echo "${dir}: No such file or directoy exists";
+        exit 1;
+    fi
+    if [ -z "$token" ]; then
+        echo "GitHub_TOKEN is required, please set 'github_token' under 'with' section in your workflow file.";
+        exit 1;
+    fi
+
+    cd $dir
+    deck dump $ops
+    pwd
+
+    # そのコミットをもとにPR作成
+    git config --local user.email "ikeike443@gmail.com"
+    git config --local user.name "ikeike443"
+    git add $(ls)
+        echo "HERE";
+
+    git commit -m "Sync back from the Kong instance."
+    # git checkout master
+    branch="merge-dump-$RANDOM"
+    git checkout -b $branch
+        echo "$branch";
+        echo $(git remote -v)
+    git remote add deckdump "https://ikeike443:$token@github.com/$GITHUB_REPOSITORY.git"
+          echo $(git remote -v)
+    git push deckdump $branch
+    
+    # # update deployment on github
+    echo "HERE";
+        
+    res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "ikeike443:'$branch'", "base": "master", "body": "test" }' -s  -w "\n%{http_code}") 
+            
+    result_json=$(echo "$res" | sed -e '$d')
+    status_code=$(echo "$res" | tail -n 1)
+    if [ $status_code = 201 ]; then
+        echo "Pull Request is created: $status_code"
+        echo "$result_json"
+    else
+        echo "Faild at creating a Pull Request: $status_code"
+        echo "$result_json"
+    fi
+}
+
 case $1 in
     "ping") deck $1 $3;;
     "validate"|"diff"|"sync") main $1 $2 "$3" $4;;
+    "dump") dump $1 $2 "$3" $4;; 
     * ) echo "deck $1 is not supported." && exit 1 ;;
 esac
