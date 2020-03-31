@@ -24,6 +24,6 @@ jobs:
       uses: ./
       with:
         command: "dump"
-        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }} --all-workspaces" 
         kong_workspaces: "test/kong"
         github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -132,9 +132,40 @@ dump () {
 
     cd $dir
     deck dump $ops
+    pwd
+
+
+
+
+#     for file in $(ls); do
+#         if [[ $file =~ .+\.(yml|yaml) ]]; then
+#             echo $file
+#             # content=$(base64 $file)
+#             content=$(cat $file)
+#             echo $content
+#             # Dumpした結果ファイルからコミットを作る
+# # res=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/git/blobs -H "Authorization: token $token" -d '{ "content": "'$content'", "encoding": "utf-8" }' -s -w "\n%{http_code}")
+#     res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/git/blobs -H "Authorization: token  $token" -d '{ "content": "'${content}'", "encoding": "base64" }' -s  -w "\n%{http_code}") 
+#             result_json=$(echo "$res" | sed -e '$d')
+#             status_code=$(echo "$res" | tail -n 1)
+#             if [ $status_code = 201 ]; then
+#                 echo "Blob is created $status_code"
+#                 echo "$result_json"
+#             else
+#                 echo "Faild at creating a Pull Request: $status_code"
+#                 echo "$result_json"
+#             fi 
+#         else
+#             echo "$file is found but is not target file for decK"
+#         fi
+#     done
+
+    # そのコミットをもとにPR作成
+
+    git checkout master
     branch="merge-dump-$RANDOM"
     git checkout -b $branch
-        echo "HERE";
+        echo "$branch";
     git add .
         echo "HERE";
     git config --local user.email "ikeike443@gmail.com"
@@ -142,7 +173,7 @@ dump () {
     git commit -m "Sync back from the Kong instance."
     git push origin $branch
     
-    # update deployment on github
+    # # update deployment on github
     echo "HERE";
         
     res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "ikeike443:'$branch'", "base": "master", "body": "test" }' -s  -w "\n%{http_code}") 
@@ -150,9 +181,11 @@ dump () {
     result_json=$(echo "$res" | sed -e '$d')
     status_code=$(echo "$res" | tail -n 1)
     if [ $status_code = 201 ]; then
-        echo "GitHub Deplooyment Status updated"
+        echo "Pull Request is created: $status_code"
+        echo "$result_json"
     else
-        echo "Faild at updating Status for GitHub Deployment: $result_json"
+        echo "Faild at creating a Pull Request: $status_code"
+        echo "$result_json"
     fi
 }
 
