@@ -134,36 +134,10 @@ dump () {
     deck dump $ops
     pwd
 
-
-
-
-#     for file in $(ls); do
-#         if [[ $file =~ .+\.(yml|yaml) ]]; then
-#             echo $file
-#             # content=$(base64 $file)
-#             content=$(cat $file)
-#             echo $content
-#             # Dumpした結果ファイルからコミットを作る
-# # res=$(curl -X POST https://api.github.com/repos/$GITHUB_REPOSITORY/git/blobs -H "Authorization: token $token" -d '{ "content": "'$content'", "encoding": "utf-8" }' -s -w "\n%{http_code}")
-#     res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/git/blobs -H "Authorization: token  $token" -d '{ "content": "'${content}'", "encoding": "base64" }' -s  -w "\n%{http_code}") 
-#             result_json=$(echo "$res" | sed -e '$d')
-#             status_code=$(echo "$res" | tail -n 1)
-#             if [ $status_code = 201 ]; then
-#                 echo "Blob is created $status_code"
-#                 echo "$result_json"
-#             else
-#                 echo "Faild at creating a Pull Request: $status_code"
-#                 echo "$result_json"
-#             fi 
-#         else
-#             echo "$file is found but is not target file for decK"
-#         fi
-#     done
-
     # そのコミットをもとにPR作成
     git config --local user.email "ikeike443@gmail.com"
     git config --local user.name "ikeike443"
-    git add .
+    git add $(ls)
         echo "HERE";
 
     git commit -m "Sync back from the Kong instance."
