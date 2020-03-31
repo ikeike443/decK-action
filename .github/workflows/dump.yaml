@@ -2,7 +2,7 @@
 name: Dump
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '0 17 * * *'
 jobs:
   # This workflow contains a single job called "build"
   build:
