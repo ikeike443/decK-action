@@ -172,7 +172,7 @@ dump () {
     git checkout -b $branch
         echo "$branch";
         echo $(git remote -v)
-    git remote add deckdump "https://github.com/$GITHUB_REPOSITORY.git"
+    git remote add deckdump "https://ikeike443:$token@github.com/$GITHUB_REPOSITORY.git"
           echo $(git remote -v)
     git push deckdump $branch
     
