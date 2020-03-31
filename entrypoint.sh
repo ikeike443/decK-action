@@ -135,8 +135,9 @@ dump () {
     deck dump $ops
 
     # TODO: below two should be a sort of bot's or each user's name and email
+    github_user=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
     git config --local user.email "noreply@example.com"
-    git config --local user.name $GITHUB_ACTOR
+    git config --local user.name $github_user
 
     git add $(ls)
     git commit -m "Sync back from the Kong instance."
@@ -147,7 +148,7 @@ dump () {
     git push deckdump $branch
     
    # TODO: username must be each user name, not mine
-    res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "'$GITHUB_ACTOR':'$branch'", "base": "master", "body": "test" }' -s  -w "\n%{http_code}") 
+    res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "'$github_user':'$branch'", "base": "master", "body": "test" }' -s  -w "\n%{http_code}") 
             
     result_json=$(echo "$res" | sed -e '$d')
     status_code=$(echo "$res" | tail -n 1)
