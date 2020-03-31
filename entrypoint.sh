@@ -173,7 +173,6 @@ dump () {
         echo "Error during GitHub search: $status_code"
         echo "$result_json"
     fi 
-
 }
 
 case $1 in
