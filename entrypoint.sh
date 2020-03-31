@@ -144,7 +144,13 @@ dump () {
     git commit -m "Sync back from the Kong instance."
     # branch="Kong-ReverseSync-$RANDOM"
     branch="Kong-ReverseSync"
+    set +e
     git checkout -b $branch
+    ret=$?
+    set -e
+    if [ $ret = 128 ]; then
+        git checkout $branch
+    fi 
 
     git remote add deckdump "https://$github_user:$token@github.com/$GITHUB_REPOSITORY.git"
     git pull deckdump $branch
