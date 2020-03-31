@@ -134,21 +134,22 @@ dump () {
     cd $dir
     deck dump $ops
 
-    # TODO: below two should be a sort of bot's or each user's name and email
+
+
     github_user=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
     git config --local user.email "noreply@example.com"
-    git config --local user.name $github_user
+    git config --local user.name $GITHUB_ACTOR
 
     git add $(ls)
     git commit -m "Sync back from the Kong instance."
-    branch="merge-dump-$RANDOM"
+    # branch="Kong-ReverseSync-$RANDOM"
+    branch="Kong-ReverseSync"
     git checkout -b $branch
-    # TODO: username must be each user name, not mine
-    git remote add deckdump "https://ikeike443:$token@github.com/$GITHUB_REPOSITORY.git"
+
+    git remote add deckdump "https://$github_user:$token@github.com/$GITHUB_REPOSITORY.git"
     git push deckdump $branch
     
-   # TODO: username must be each user name, not mine
-    res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "'$github_user':'$branch'", "base": "master", "body": "test" }' -s  -w "\n%{http_code}") 
+    res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "'$github_user':'$branch'", "base": "master", "body": "This is a reverse-sync pull request from your Kong instance." }' -s  -w "\n%{http_code}") 
             
     result_json=$(echo "$res" | sed -e '$d')
     status_code=$(echo "$res" | tail -n 1)
