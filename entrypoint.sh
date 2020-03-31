@@ -171,8 +171,10 @@ dump () {
     branch="merge-dump-$RANDOM"
     git checkout -b $branch
         echo "$branch";
-    git remote add "pr-$branch" "https://github.com/$GITHUB_REPOSITORY.git"
-    git push "pr-$branch" $branch
+        echo $(git remote -v)
+    git remote add deckdump "https://github.com/$GITHUB_REPOSITORY.git"
+          echo $(git remote -v)
+    git push deckdump $branch
     
     # # update deployment on github
     echo "HERE";
