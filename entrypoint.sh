@@ -133,28 +133,21 @@ dump () {
 
     cd $dir
     deck dump $ops
-    pwd
 
-    # そのコミットをもとにPR作成
-    git config --local user.email "ikeike443@gmail.com"
-    git config --local user.name "ikeike443"
+    # TODO: below two should be a sort of bot's or each user's name and email
+    git config --local user.email "noreply@example.com"
+    git config --local user.name $GITHUB_ACTOR
+
     git add $(ls)
-        echo "HERE";
-
     git commit -m "Sync back from the Kong instance."
-    # git checkout master
     branch="merge-dump-$RANDOM"
     git checkout -b $branch
-        echo "$branch";
-        echo $(git remote -v)
+    # TODO: username must be each user name, not mine
     git remote add deckdump "https://ikeike443:$token@github.com/$GITHUB_REPOSITORY.git"
-          echo $(git remote -v)
     git push deckdump $branch
     
-    # # update deployment on github
-    echo "HERE";
-        
-    res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "ikeike443:'$branch'", "base": "master", "body": "test" }' -s  -w "\n%{http_code}") 
+   # TODO: username must be each user name, not mine
+    res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "'$GITHUB_ACTOR':'$branch'", "base": "master", "body": "test" }' -s  -w "\n%{http_code}") 
             
     result_json=$(echo "$res" | sed -e '$d')
     status_code=$(echo "$res" | tail -n 1)
