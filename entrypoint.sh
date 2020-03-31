@@ -147,6 +147,7 @@ dump () {
     git checkout -b $branch
 
     git remote add deckdump "https://$github_user:$token@github.com/$GITHUB_REPOSITORY.git"
+    git pull deckdump $branch
     git push deckdump $branch
     
     res=$(curl -X POST  https://api.github.com/repos/$GITHUB_REPOSITORY/pulls -H "Authorization: token  $token" -d '{ "title": "Sync back from the Kong instance", "head": "'$github_user':'$branch'", "base": "master", "body": "This is a reverse-sync pull request from your Kong instance." }' -s  -w "\n%{http_code}") 
