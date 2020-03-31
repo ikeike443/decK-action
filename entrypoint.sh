@@ -132,6 +132,8 @@ dump () {
     fi
 
     cd $dir
+    # deck dump
+    echo "Executing: deck dump $ops";
     deck dump $ops
 
     github_user=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
@@ -142,7 +144,7 @@ dump () {
     git commit -m "Sync back from the Kong instance."
     branch="Kong-ReverseSync-$RANDOM"
 
-    # TODO: check if there is already PR exists
+    # Check if there is already PR exists
     res=$(curl -X GET  https://api.github.com/search/issues?q=Kong+type:pr+is:open+repo:$GITHUB_REPOSITORY+head:Kong-ReverseSync -H "Authorization: token  $token" -s  -w "\n%{http_code}") 
             
     result_json=$(echo "$res" | sed -e '$d')
