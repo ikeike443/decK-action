@@ -3,7 +3,7 @@ GitHub Action for [decK](https://deck.yolo42.com/) ( Configuration management an
 
 With decK, you can manage the configutaions of your Kong instance in a declarative manner.  -- a.k.a. GitOps 
 
-This action is meant for your convinience to easily create your CI/CD piplines for your Kong configutations.
+This action is meant for your convinience to easily create your CI/CD pipelines for your Kong configutations.
 
 Let's start GitOps with decK and GitHub Actions!
 
