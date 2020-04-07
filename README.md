@@ -110,10 +110,6 @@ jobs:
 To reverse-sync the state from the Kong instance, typically when you configured it through the Kong Manager UI, you may want to create Rev-sync.yaml under `.github/workflows` directory like below:
 
 ```yaml
-<<<<<<< HEAD
-=======
-
->>>>>>> 30694639bc3ea5f110e4ff00881a15278441f5c8
 name: Dump
 on:
   # I recommend you to use "schedule" event to continuously check the state of the Kong instance
