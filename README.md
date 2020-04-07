@@ -110,7 +110,6 @@ jobs:
 To reverse-sync the state from the Kong instance, typically when you configured it through the Kong Manager UI, you may want to create Rev-sync.yaml under `.github/workflows` directory like below:
 
 ```yaml
-
 name: Dump
 on:
   # I recommend you to use "schedule" event to continuously check the state of the Kong instance
@@ -139,6 +138,9 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+## 🚧🚧 CAUTION 🚧🚧
+Please note your Kong configuration may contain sensitive information such as client_credential for OIDC plugin or aws secret for AWS Lambda plugin.  Please take proper pre-cautions to protect your declarative config.
+
 ## Parameters you can set
 
 ### command
@@ -159,4 +161,5 @@ This is optional, if you set this, will be passed to GitHub Deployment API.  Tha
 ## License
 
 decK-action is licensed with MIT.
+
 Please read the [LICENSE](LICENSE) file for more details.
