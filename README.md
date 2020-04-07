@@ -3,7 +3,7 @@ GitHub Action for [decK](https://deck.yolo42.com/) ( Configuration management an
 
 With decK, you can manage the configutaions of your Kong instance in a declarative manner.  -- a.k.a. GitOps 
 
-This action is meant for your convinience to easily create your CI/CD piplines for your Kong configutations.
+This action is meant for your convinience to easily create your CI/CD pipelines for your Kong configutations.
 
 Let's start GitOps with decK and GitHub Actions!
 
@@ -110,6 +110,10 @@ jobs:
 To reverse-sync the state from the Kong instance, typically when you configured it through the Kong Manager UI, you may want to create Rev-sync.yaml under `.github/workflows` directory like below:
 
 ```yaml
+<<<<<<< HEAD
+=======
+
+>>>>>>> 30694639bc3ea5f110e4ff00881a15278441f5c8
 name: Dump
 on:
   # I recommend you to use "schedule" event to continuously check the state of the Kong instance
@@ -161,5 +165,4 @@ This is optional, if you set this, will be passed to GitHub Deployment API.  Tha
 ## License
 
 decK-action is licensed with MIT.
-
 Please read the [LICENSE](LICENSE) file for more details.
