@@ -10,20 +10,20 @@ jobs:
       name: "checkout"
     - name: decK ping
       id: decK_ping
-      uses: ./action
+      uses: ./
       with:
         command: "ping"
     - name: decK validate
       id: decK_validate
-      uses: ./action
+      uses: ./
       with:
         command: "validate"
-        kong_workspaces: "action/test/kong"
+        kong_workspaces: "kong"
         github_token: ${{ secrets.GITHUB_TOKEN }}
     - name: decK diff
       id: decK_diff
-      uses: ./action
+      uses: ./
       with:
         command: "diff"
-        kong_workspaces: "action/test/kong"
+        kong_workspaces: "kong"
         github_token: ${{ secrets.GITHUB_TOKEN }}
