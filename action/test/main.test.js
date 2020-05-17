@@ -42,7 +42,7 @@
     test ("Test deck validate", async () => {
         const ghcontext = new GHContext(env.GITHUB_TOKEN,"jest","pull_request","./action/test/github/event.json", "ikeike443/decK-action-local", "");
         
-        const deck = new decK("action/test/kong", "", ghcontext)
+        const deck = new decK("kong", "", ghcontext)
  
         const data = await deck.validate();
         
@@ -54,12 +54,12 @@
     test ("Test deck diff", async () => {
         const ghcontext = new GHContext(env.GITHUB_TOKEN,"jest","pull_request","./action/test/github/event.json", "ikeike443/decK-action-local", "");
         
-        const deck = new decK("action/test/kong", "", ghcontext)
+        const deck = new decK("kong", "", ghcontext)
 
         const data = await deck.diff();
         
         expect(console.log).toBeCalled();
-        expect(spyLog.mock.calls[30][0]).toEqual('Executing: deck  diff  -s action/test/kong/default.yaml');
+        expect(spyLog.mock.calls[30][0]).toEqual('Executing: deck  diff  -s kong/default.yaml');
     });
 
     test ("Test if it gets commit files", async () => {
