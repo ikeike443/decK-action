@@ -13,6 +13,7 @@ jobs:
       uses: ./
       with:
         command: "ping"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"
     - name: decK validate
       id: decK_validate
       uses: ./
@@ -20,6 +21,7 @@ jobs:
         command: "validate"
         kong_workspaces: "kong"
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"
     - name: decK diff
       id: decK_diff
       uses: ./

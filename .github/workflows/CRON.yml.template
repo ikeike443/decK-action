@@ -14,11 +14,12 @@ jobs:
       uses: ./
       with:
         command: "ping"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"
     - name: decK dump
       id: decK_dump
       uses: ./
       with:
         command: "dump"
         kong_workspaces: "kong"
-        options: "--all-workspaces"
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }} --all-workspaces"
