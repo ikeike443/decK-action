@@ -1,5 +1,6 @@
 name: Dump
 on:
+  repository_dispatch:
   schedule:
     - cron: '0 */3 * * *'
 jobs:
