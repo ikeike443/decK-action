@@ -1,0 +1,38 @@
+{
+  "name": "deck-action",
+  "version": "0.1.0",
+  "description": "GitHub Action for [decK](https://deck.yolo42.com/) ( Configuration management and drift detection for Kong and Kong Enterprise )",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^2.2.0",
+    "deck-test6": "^1.1.0",
+    "jest": "^25.4.0",
+    "require": "^2.4.20"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest --no-cache",
+    "start": "node action/src/index.js"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "actions-runner"
+    ],
+    "collectCoverage": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikeike443/decK-action.git"
+  },
+  "author": "ikeike443@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ikeike443/decK-action/issues"
+  },
+  "homepage": "https://github.com/ikeike443/decK-action#readme"
+}

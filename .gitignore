@@ -2,6 +2,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+actions-runner
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
@@ -99,7 +100,7 @@ web_modules/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+# dist
 
 # Gatsby files
 .cache/

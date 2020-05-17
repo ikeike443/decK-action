@@ -1,0 +1,32 @@
+name: deck validate and diff
+on:
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      name: "checkout"
+    - name: decK ping
+      id: decK_ping
+      uses: ./
+      with:
+        command: "ping"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"
+    - name: decK validate
+      id: decK_validate
+      uses: ./
+      with:
+        command: "validate"
+        kong_workspaces: "kong"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"
+    - name: decK diff
+      id: decK_diff
+      uses: ./
+      with:
+        command: "diff"
+        kong_workspaces: "kong"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"

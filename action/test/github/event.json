@@ -2,7 +2,7 @@
         "action": "synchronize",
         "after": "7739830b2ee0176b24bef8817c05db14238cc581",
         "before": "41684255541f7580366ea0438eec2bb7784b84c1",
-        "number": 2,
+        "number": 4,
         "pull_request": {
             "_links": {
             "comments": {

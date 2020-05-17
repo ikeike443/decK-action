@@ -1,15 +1,10 @@
-
-name: Sync
+name: deck sync
 on:
   push:
     branches: [ master ]
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - uses: actions/checkout@v2
       name: "checkout"
@@ -24,16 +19,14 @@ jobs:
       uses: ./
       with:
         command: "validate"
-        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
-        kong_workspaces: "test/kong"
+        kong_workspaces: "kong"
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"
     - name: decK sync
       id: decK_sync
       uses: ./
-      env:
-        ENV_URL: "http://ikeike443-demo.net:8002"
       with:
         command: "sync"
-        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}" 
-        kong_workspaces: "test/kong"
+        kong_workspaces: "kong"
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"
