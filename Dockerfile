@@ -7,7 +7,7 @@ RUN apk update && \
     apk add --no-cache \
     git jq curl bash tar nodejs nodejs-npm
 
-RUN curl -sL https://github.com/hbagdi/deck/releases/download/v1.0.3/deck_1.1.0_linux_amd64.tar.gz -o deck.tar.gz
+RUN curl -sL https://github.com/hbagdi/deck/releases/download/v1.1.0/deck_1.1.0_linux_amd64.tar.gz -o deck.tar.gz
 RUN tar -xf deck.tar.gz -C /tmp
 RUN cp /tmp/deck /usr/local/bin/
 
