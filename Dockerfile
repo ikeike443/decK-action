@@ -11,4 +11,4 @@ RUN curl -sL https://github.com/hbagdi/deck/releases/download/v1.1.0/deck_1.1.0_
 RUN tar -xf deck.tar.gz -C /tmp
 RUN cp /tmp/deck /usr/local/bin/
 
-ENTRYPOINT [ "node ./index.js" ]
+ENTRYPOINT [ "node", " ./index.js" ]
