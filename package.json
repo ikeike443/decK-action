@@ -15,6 +15,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "build": "npm install",
     "test": "jest --no-cache",
     "start": "node action/src/index.js"
   },
