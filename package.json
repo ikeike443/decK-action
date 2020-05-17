@@ -19,7 +19,10 @@
     "start": "node action/src/index.js"
   },
   "jest": {
-    "testPathIgnorePatterns": ["/node_modules/", "actions-runner"],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "actions-runner"
+    ],
     "collectCoverage": true
   },
   "repository": {
