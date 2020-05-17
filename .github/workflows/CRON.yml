@@ -1,0 +1,23 @@
+name: Dump
+on:
+  schedule:
+    - cron: '0 */3 * * *'
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+      name: "checkout"
+    - name: decK ping
+      id: decK_ping
+      uses: ./action
+      with:
+        command: "ping"
+    - name: decK dump
+      id: decK_dump
+      uses: ./action
+      with:
+        command: "dump"
+        kong_workspaces: "action/test/kong"
+        options: "--all-workspaces"
+        github_token: ${{ secrets.GITHUB_TOKEN }}

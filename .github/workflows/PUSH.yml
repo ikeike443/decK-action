@@ -1,0 +1,29 @@
+name: deck sync
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+      name: "checkout"
+    - name: decK ping
+      id: decK_ping
+      uses: ./action
+      with:
+        command: "ping"
+    - name: decK validate
+      id: decK_validate
+      uses: ./action
+      with:
+        command: "validate"
+        kong_workspaces: "action/test/kong"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: decK sync
+      id: decK_sync
+      uses: ./action
+      with:
+        command: "sync"
+        kong_workspaces: "action/test/kong"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
