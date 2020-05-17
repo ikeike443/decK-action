@@ -155,9 +155,6 @@ This is mandatory to specify where the declarative files of Kong are located in 
 ### github_token
 This is also mandatory to call several GitHub API inside of the action.  Please set as `${{ secrets.GITHUB_TOKEN }}`
 
-### ENV_URL
-This is optional, if you set this, will be passed to GitHub Deployment API.  That will generate a convinient link to your Kong instance in the environment menu of the GitHub repo. 
-
 ## License
 
 decK-action is licensed with MIT.
