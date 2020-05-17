@@ -19,19 +19,10 @@ inputs:
     description: 'option arguments'
     required: false
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
-
-# name: 'Hello World'
-# description: 'Greet someone and record the time'
-# inputs:
-#   who-to-greet:  # id of input
-#     description: 'Who to greet'
-#     required: true
-#     default: 'World'
-# outputs:
-#   time: # id of output
-#     description: 'The time we greeted you'
-# runs:
-#   using: 'node12'
-#   main: 'index.js'
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.command }}
+    - ${{ inputs.kong_workspaces }}
+    - ${{ inputs.options }}
+    - ${{ inputs.github_token }}
