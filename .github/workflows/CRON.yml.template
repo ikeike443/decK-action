@@ -11,14 +11,14 @@ jobs:
       name: "checkout"
     - name: decK ping
       id: decK_ping
-      uses: ./action
+      uses: ./
       with:
         command: "ping"
     - name: decK dump
       id: decK_dump
-      uses: ./action
+      uses: ./
       with:
         command: "dump"
-        kong_workspaces: "action/test/kong"
+        kong_workspaces: "kong"
         options: "--all-workspaces"
         github_token: ${{ secrets.GITHUB_TOKEN }}
