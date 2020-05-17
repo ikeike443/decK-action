@@ -47,7 +47,7 @@
         const data = await deck.validate();
         
         expect(console.log).toBeCalled();
-        expect(spyLog.mock.calls[14][0]).toEqual('Executing: deck  validate  -s action/test/kong/default.yaml');
+        expect(spyLog.mock.calls[14][0]).toEqual('Executing: deck  validate  -s kong/default.yaml');
         expect(spyLog.mock.calls[15][0]).toEqual('');
     });
 
