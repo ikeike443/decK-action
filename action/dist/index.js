@@ -20452,7 +20452,7 @@ module.exports = windowsRelease;
 
         ping(){
             let result = exec(this.cmdString+'ping '+this.ops).toString();
-            // console.log(result);
+            console.log(result);
         }
 
         async validate(){
@@ -20486,7 +20486,6 @@ module.exports = windowsRelease;
             console.log(`Creating GitHub Deployment API with ${deck_files} ...`);
             const deploy_id = await this.ghcontext.create_deployment(deck_files);
 
-            // TODO: Diffがあったファイルのリストを作って、それに対してのみ、Deploy APIを呼び出す
             deck_files.forEach(file => {
                 try{
                     //dry-run
