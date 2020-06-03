@@ -16,7 +16,7 @@ inputs:
     description: 'Just set as ${{ secrets.GITHUB_TOKEN }} here.'
     required: true
   options:
-    description: 'decK's option arguments: e.g. --kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }} when needed. Make sure you set the secrets in your repo settings.'
+    description: 'decK option arguments: e.g. --kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }} when needed. Make sure you set the secrets in your repo settings.'
     required: false
 runs:
   using: 'docker'
