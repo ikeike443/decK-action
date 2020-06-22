@@ -1,6 +1,7 @@
     const exec = require('child_process').execSync;
     const fs = require('fs');
     const { Octokit } = require("@octokit/rest");
+    const core = require('@actions/core');
 
     class decK {
 
@@ -20,8 +21,12 @@
 
 
         ping(){
-            let result = exec(this.cmdString+'ping '+this.ops).toString();
-            console.log(result);
+            try {
+                let result = exec(this.cmdString+'ping '+this.ops).toString();
+                console.log(result);
+            } catch (error) {
+                core.setFailed(error.message);
+            }
         }
 
         async validate(){
@@ -34,20 +39,25 @@
         }
 
         async exex_deck(subCmd){
-            const files = await this.ghcontext.get_files();
+            try {
+                const files = await this.ghcontext.get_files();
 
-            let deck_files = files.filter(value => value.match(new RegExp(`^${this.dir}/.+\.(yml|yaml)`)));
+                let deck_files = files.filter(value => value.match(new RegExp(`^${this.dir}/.+\.(yml|yaml)`)));
 
-            deck_files.forEach(file => {
-                console.log(`Executing: ${this.cmdString} ${subCmd} ${this.ops} -s ${file}`);  
+                deck_files.forEach(file => {
+                    console.log(`Executing: ${this.cmdString} ${subCmd} ${this.ops} -s ${file}`);  
 
-                const result = exec(`${this.cmdString} ${subCmd} ${this.ops} -s ${file}`).toString();
-            
-                console.log(result);
-            });
+                    const result = exec(`${this.cmdString} ${subCmd} ${this.ops} -s ${file}`).toString();
+                
+                    console.log(result);
+                });
+            } catch (error) {
+                core.setFailed(error.message);
+            }
         }
 
         async sync() {
+
             const files = await this.ghcontext.get_files();
 
             let deck_files = files.filter(value => value.match(new RegExp(`^${this.dir}/.+\.(yml|yaml)`)));
@@ -55,6 +65,8 @@
             console.log(`Creating GitHub Deployment API with ${deck_files} ...`);
             const deploy_id = await this.ghcontext.create_deployment(deck_files);
 
+
+            // TODO: Need to fix: here deploy api is called whether sync executed or not
             deck_files.forEach(file => {
                 try{
                     //dry-run
@@ -83,23 +95,26 @@
         }
 
         async dump(){
-            console.log(`cd ${this.dir}`);
-            console.log(`Executing: ${this.cmdString} dump ${this.ops}`);
+            try{
+                console.log(`cd ${this.dir}`);
+                console.log(`Executing: ${this.cmdString} dump ${this.ops}`);
 
-            const out = exec(`cd ${this.dir}; ${this.cmdString} dump ${this.ops}`).toString();
-            console.log(out);
+                const out = exec(`cd ${this.dir}; ${this.cmdString} dump ${this.ops}`).toString();
+                console.log(out);
 
-            const branch = this.ghcontext.prepare_reverseSync();
+                const branch = this.ghcontext.prepare_reverseSync();
 
-            const PR_exists = await this.ghcontext.check_if_PR_exists();
+                const PR_exists = await this.ghcontext.check_if_PR_exists();
 
-            if (!PR_exists){
-                this.ghcontext.push_dumped_files(branch);
-                this.ghcontext.create_PR(branch);
-            }else{
-                console.log("Pull Requests to reverse-sync are already existed");
+                if (!PR_exists){
+                    this.ghcontext.push_dumped_files(branch);
+                    this.ghcontext.create_PR(branch);
+                }else{
+                    console.log("Pull Requests to reverse-sync are already existed");
+                }
+            } catch (error) {
+                core.setFailed(error.message);
             }
-
         }
     }
     module.exports.decK = decK;
@@ -174,7 +189,6 @@
             console.log(data);
             return data;
         }
-
 
 
         prepare_reverseSync(){
