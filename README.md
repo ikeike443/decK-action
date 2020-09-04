@@ -1,3 +1,5 @@
+![Smoke testing](https://github.com/ikeike443/decK-action/workflows/Smoke%20testing/badge.svg)
+
 # decK-action
 GitHub Action for [decK](https://deck.yolo42.com/) ( Configuration management and drift detection for Kong and Kong Enterprise ) 
 
