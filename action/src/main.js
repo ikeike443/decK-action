@@ -19,6 +19,14 @@
             }
         }
 
+        version(){
+            try {
+                let result = exec(this.cmdString+'version '+this.ops).toString();
+                console.log(result);
+            } catch (error) {
+                core.setFailed(error.message);
+            }           
+        }
 
         ping(){
             try {
