@@ -26,3 +26,5 @@ jobs:
         # You may pin to the exact commit or the version.
         # uses: ikeike443/decK-action@38e6a4990cf94515dac4a2b3ceec697a1c7ed2f1
         uses: ikeike443/decK-action@master
+        with: 
+          command: "version"
