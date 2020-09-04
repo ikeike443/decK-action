@@ -30,6 +30,9 @@ try {
         case "dump":
             deck.dump();
             break;
+        case "version":
+            deck.version();
+            break;
         default:
             break;
     }

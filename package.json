@@ -9,7 +9,6 @@
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/github": "^2.2.0",
-    "deck-test6": "^1.1.0",
     "jest": "^25.4.0",
     "require": "^2.4.20"
   },
