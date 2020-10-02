@@ -7,7 +7,7 @@
     "test": "test"
   },
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.2.6",
     "@actions/github": "^2.2.0",
     "jest": "^25.4.0",
     "require": "^2.4.20"
