@@ -28,3 +28,9 @@ jobs:
         uses: ikeike443/decK-action@master
         with: 
           command: "version"
+      - name: decK konnect ping
+        id: decK_konnect_ping
+        uses: ikeike443/decK-action@master
+        with:
+          command: "konnect ping"
+          options: "--konnect-email ${{ secrets.KONNECT_EMAIL }} --konnect-password ${{ secrets.KONNECT_PW }}"

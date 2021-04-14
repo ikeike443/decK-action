@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const {decK, GHContext} = require('./main.js');
+const {decK, decKonnect, GHContext} = require('./main.js');
 const env = process.env;
 
 try {
@@ -14,7 +14,9 @@ try {
 
     const deck = new decK(core.getInput("kong_workspaces"), core.getInput("options"), ghcontext);
 
-    switch (core.getInput("command")) {
+    const cmd_str = core.getInput("command");
+
+    switch (cmd_str) {
         case "ping":
             deck.ping();
             break;
@@ -34,6 +36,11 @@ try {
             deck.version();
             break;
         default:
+            if(/konnect (.*)/.test(cmd_str)){
+                const sub_cmd = /konnect (.*)/.exec(cmd_str);
+                const decKonnect = new decKonnect(core.getInput("kong_workspaces"), core.getInput("options"), ghcontext);
+                decKonnect[sub_cmd[1]]();
+            }
             break;
     }
 } catch (error) {

@@ -127,6 +127,14 @@
     }
     module.exports.decK = decK;
 
+    class decKonnect extends decK {
+        constructor(dir, ops, ghcontext){
+            super(dir, ops, ghcontext);
+            this.cmdString = "deck konnect";
+        }
+    }
+    module.exports.decKonnect = decKonnect;
+
     class GHContext {
         constructor(token, actor, event_name, event_path, repository, sha){
             this.token = token;

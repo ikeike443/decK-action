@@ -1411,7 +1411,7 @@ module.exports._enoent = enoent;
 
 const core = __webpack_require__(827);
 const github = __webpack_require__(148);
-const {decK, GHContext} = __webpack_require__(704);
+const {decK, decKonnect, GHContext} = __webpack_require__(704);
 const env = process.env;
 
 try {
@@ -1425,7 +1425,9 @@ try {
 
     const deck = new decK(core.getInput("kong_workspaces"), core.getInput("options"), ghcontext);
 
-    switch (core.getInput("command")) {
+    const cmd_str = core.getInput("command");
+
+    switch (cmd_str) {
         case "ping":
             deck.ping();
             break;
@@ -1445,6 +1447,11 @@ try {
             deck.version();
             break;
         default:
+            if(/konnect (.*)/.test(cmd_str)){
+                const sub_cmd = /konnect (.*)/.exec(cmd_str);
+                const decKonnect = new decKonnect(core.getInput("kong_workspaces"), core.getInput("options"), ghcontext);
+                decKonnect[sub_cmd[1]]();
+            }
             break;
     }
 } catch (error) {
@@ -20609,6 +20616,14 @@ module.exports = windowsRelease;
         }
     }
     module.exports.decK = decK;
+
+    class decKonnect extends decK {
+        constructor(dir, ops, ghcontext){
+            super(dir, ops, ghcontext);
+            this.cmdString = "deck konnect";
+        }
+    }
+    module.exports.decKonnect = decKonnect;
 
     class GHContext {
         constructor(token, actor, event_name, event_path, repository, sha){
