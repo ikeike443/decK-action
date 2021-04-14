@@ -20620,7 +20620,7 @@ module.exports = windowsRelease;
     class decKonnect extends decK {
         constructor(dir, ops, ghcontext){
             super(dir, ops, ghcontext);
-            this.cmdString = "deck konnect";
+            this.cmdString = "deck konnect ";
         }
     }
     module.exports.decKonnect = decKonnect;
