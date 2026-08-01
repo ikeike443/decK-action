@@ -3,15 +3,15 @@
 # decK-action
 GitHub Action for [decK](https://deck.yolo42.com/) ( Configuration management and drift detection for Kong and Kong Enterprise ) 
 
-With decK, you can manage the configutaions of your Kong instance in a declarative manner.  -- a.k.a. GitOps 
+With decK, you can manage the configurations of your Kong instance in a declarative manner.  -- a.k.a. GitOps 
 
-This action is meant for your convinience to easily create your CI/CD pipelines for your Kong configutations.
+This action is meant for your convenience to easily create your CI/CD pipelines for your Kong configurations.
 
 Let's start GitOps with decK and GitHub Actions!
 
 ## Typical use cases
 
-- Check diff between the declarative files in the repo and the Kong instance confituration when you open a pull request
+- Check diff between the declarative files in the repo and the Kong instance configuration when you open a pull request
 - Sync the state of the declarative files to the Kong instance configuration when you merge a pull request
 - Open a pull request to reverse-sync automatically whenever the changes are detected in the Kong instance
 
@@ -37,7 +37,7 @@ jobs:
       uses: ikeike443/decK-action@master
       with:
         command: "ping"
-        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"  # This option can be ommited.  But if you want to use this you need to set the secrets in your repo settings to make it work
+        options: "--kong-addr ${{ secrets.KONG_ADDR }} --headers ${{ secrets.KONG_HEADERS }}"  # This option can be omitted.  But if you want to use this you need to set the secrets in your repo settings to make it work
     # Check the structure of your files
     - name: decK validate
       id: decK_validate
@@ -64,7 +64,7 @@ About how to set the secrets, please see [the documentation](https://help.github
 
 That's it.  Whenever you push the changes of the declarative files, the decK-action will check the diff and report back to you on the pull request.
 
-### Sync when the pull requst is merged
+### Sync when the pull request is merged
 To sync the state of the files to the Kong instance you typically create Sync.yaml under `.github/workflows` directory like below:
 
 ```yaml
